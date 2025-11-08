@@ -3,7 +3,7 @@ const app = express();
 const port = 8080;
 
 app.get('/', (req, res) => {
-  res.send('¡Hola desde mi app en Docker + GCP! 🚀');
+  res.send('¡Hola desde mi app en Docker + GCP! ');
 });
 
 app.listen(port, () => {
