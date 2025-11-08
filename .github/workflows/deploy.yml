@@ -3,7 +3,7 @@ name: CI/CD - Build, Test and Deploy Node.js App to VM
 on:
   push:
     branches:
-      - main  # o "master", según tu repositorio
+      - master  # o "master", según tu repositorio
 
 jobs:
   build-test-deploy:
