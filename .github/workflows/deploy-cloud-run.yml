@@ -1,12 +1,12 @@
-name: Build & Deploy Node.js App to Cloud Run
+name: Deploy Node.js App to Cloud Run
 
 on:
   push:
     branches:
-      - master
+      - master  # o main según tu repo
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,34 +14,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Autenticar a GCP
+      # 2️⃣ Autenticar en Google Cloud
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          project_id: francisco-rizzo-project   # tu project_id
 
-      # 3️⃣ Configurar proyecto y región
-      - name: Configure gcloud project
+      # 3️⃣ Configurar región (opcional, se puede omitir si ya está en defaults)
+      - name: Set GCP region
+        run: gcloud config set run/region southamerica-east1
+
+      # 4️⃣ Construir y subir la imagen a Artifact Registry o Container Registry
+      - name: Build and push Docker image
         run: |
-          gcloud config set project ${{ secrets.PROJECT_ID }}
-          gcloud config set run/region ${{ secrets.REGION }}
+          gcloud builds submit --tag gcr.io/francisco-rizzo-project/my-node-app .
 
-      # 4️⃣ Construir imagen Docker localmente
-      - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.PROJECT_ID }}/my-node-app .
-
-      # 5️⃣ Configurar Docker para subir a GCP
-      - name: Authenticate Docker with GCP
-        run: gcloud auth configure-docker
-
-      # 6️⃣ Subir la imagen al Container Registry
-      - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.PROJECT_ID }}/my-node-app
-
-      # 7️⃣ Desplegar en Cloud Run
+      # 5️⃣ Desplegar en Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy my-node-app \
-            --image gcr.io/${{ secrets.PROJECT_ID }}/my-node-app \
+            --image gcr.io/francisco-rizzo-project/my-node-app \
             --platform managed \
             --allow-unauthenticated
