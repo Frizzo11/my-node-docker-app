@@ -34,12 +34,12 @@ jobs:
       # 5️⃣ Construir imagen Docker localmente
       - name: Build Docker image
         run: |
-          docker build -t us-docker.pkg.dev/francisco-rizzo-project/my-repo/my-node-app:latest .
+          docker build -t us-docker.pkg.dev/francisco-rizzo-project/my-node-app/my-node-app:latest .
 
       # 6️⃣ Subir imagen a Artifact Registry
       - name: Push Docker image
         run: |
-          docker push us-docker.pkg.dev/francisco-rizzo-project/my-repo/my-node-app:latest
+          docker push us-docker.pkg.dev/francisco-rizzo-project/my-node-app/my-node-app:latest
 
       # 7️⃣ Desplegar en Cloud Run
       - name: Deploy to Cloud Run
