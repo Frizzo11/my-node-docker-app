@@ -3,7 +3,7 @@ name: Deploy to GCP VM (Docker + Artifact Registry)
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-push:
